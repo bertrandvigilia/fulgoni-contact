@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trouvez votre contact Fulgoni</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        
+        .carte-container {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 25px;
+        }
+        
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .zone-nord {
+            fill: #0066CC;
+            transition: all 0.3s ease;
+        }
+        
+        .zone-sud {
+            fill: #FF6600;
+            transition: all 0.3s ease;
+        }
+        
+        .departement.highlighted {
+            filter: brightness(1.3) drop-shadow(0 0 6px rgba(255,255,255,0.8));
+        }
+        
+        .departement.dimmed {
+            opacity: 0.3;
+        }
+        
+        .separation {
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+        }
+        
+        text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        
+        .zone-label {
+            font-size: 20px;
+            fill: white;
+        }
+        
+        .paris-text {
+            font-size: 14px;
+            fill: white;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #0066CC;
+        }
+        
+        .resultat {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            margin-bottom: 15px;
+        }
+        
+        .resultat.nord {
+            background: #E6F2FF;
+            border: 2px solid #0066CC;
+            color: #0066CC;
+        }
+        
+        .resultat.sud {
+            background: #FFE6D5;
+            border: 2px solid #FF6600;
+            color: #FF6600;
+        }
+        
+        .resultat.visible {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .email-link {
+            color: inherit;
+            text-decoration: none;
+            font-size: 17px;
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .email-link:hover {
+            text-decoration: underline;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        .error.visible {
+            display: block;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗺️ Trouvez votre contact Fulgoni</h1>
+        
+        <div class="carte-container">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path class="departement zone-nord" data-zone="nord"
+                      d="M 20,100 A 80,80 0 0,1 180,100 L 100,100 Z" />
+                
+                <path class="departement zone-sud" data-zone="sud"
+                      d="M 180,100 A 80,80 0 0,1 20,100 L 100,100 Z" />
+                
+                <line class="separation" x1="20" y1="100" x2="180" y2="100" />
+                
+                <circle cx="100" cy="100" r="30" fill="none" stroke="white" stroke-width="3" />
+                
+                <path class="zone-nord" data-zone="nord"
+                      d="M 70,100 A 30,30 0 0,1 130,100 Z" />
+                
+                <path class="zone-sud" data-zone="sud"
+                      d="M 130,100 A 30,30 0 0,1 70,100 Z" />
+                
+                <line class="separation" x1="70" y1="100" x2="130" y2="100" />
+                
+                <text x="100" y="55" class="zone-label">NORD</text>
+                <text x="100" y="155" class="zone-label">SUD</text>
+                <text x="100" y="104" class="paris-text">PARIS</text>
+            </svg>
+        </div>
+        
+        <div class="input-group">
+            <label for="codePostal">📍 Entrez votre code postal :</label>
+            <input 
+                type="text" 
+                id="codePostal" 
+                placeholder="Ex: 75001, 92100, 95000..." 
+                maxlength="5"
+                pattern="[0-9]*"
+                autofocus
+            />
+            <div class="error" id="error">⚠️ Code postal invalide</div>
+        </div>
+        
+        <div class="resultat" id="resultat">
+            <div id="message"></div>
+            <a href="" id="emailLink" class="email-link"></a>
+        </div>
+        
+        <div class="logo">FULGONI</div>
+    </div>
+
+    <script>
+        const departements = document.querySelectorAll('.departement');
+        const codePostalInput = document.getElementById('codePostal');
+        const resultat = document.getElementById('resultat');
+        const message = document.getElementById('message');
+        const emailLink = document.getElementById('emailLink');
+        const error = document.getElementById('error');
+
+        const zonesConfig = {
+            nord: {
+                email: 'exploitation.nord@fulgoni.fr',
+                paris: ['75001', '75008', '75016', '75017'],
+                departements: ['95', '78'],
+                hautsDeSeineNord: ['92000', '92100', '92110', '92150', '92200', '92210', '92220', 
+                                   '92250', '92270', '92300', '92310', '92370', '92380', '92400', 
+                                   '92410', '92500', '92600', '92700', '92800']
+            },
+            sud: {
+                email: 'exploitation.sud@fulgoni.fr',
+                paris: ['75002', '75003', '75004', '75005', '75006', '75007', '75009',
+                        '75010', '75011', '75012', '75013', '75014', '75015',
+                        '75018', '75019', '75020'],
+                departements: ['93', '94', '91', '77'],
+                hautsDeSeineSud: ['92120', '92130', '92140', '92160', '92170', '92190',
+                                  '92230', '92240', '92260', '92280', '92290', '92320',
+                                  '92330', '92340', '92350', '92360', '92390']
+            }
+        };
+
+        function determinerZone(codePostal) {
+            if (zonesConfig.nord.paris.includes(codePostal)) return 'nord';
+            if (zonesConfig.sud.paris.includes(codePostal)) return 'sud';
+            
+            const dept = codePostal.substring(0, 2);
+            if (zonesConfig.nord.departements.includes(dept)) return 'nord';
+            if (zonesConfig.sud.departements.includes(dept)) return 'sud';
+            
+            if (zonesConfig.nord.hautsDeSeineNord.includes(codePostal)) return 'nord';
+            if (zonesConfig.sud.hautsDeSeineSud.includes(codePostal)) return 'sud';
+            
+            return null;
+        }
+
+        function afficherResultat(zone) {
+            resultat.classList.remove('nord', 'sud', 'visible');
+            departements.forEach(dept => {
+                dept.classList.remove('highlighted', 'dimmed');
+            });
+            
+            if (!zone) {
+                error.classList.add('visible');
+                return;
+            }
+            
+            error.classList.remove('visible');
+            
+            const config = zonesConfig[zone];
+            resultat.classList.add(zone, 'visible');
+            
+            departements.forEach(dept => {
+                const deptZone = dept.getAttribute('data-zone');
+                if (deptZone === zone) {
+                    dept.classList.add('highlighted');
+                } else {
+                    dept.classList.add('dimmed');
+                }
+            });
+            
+            if (zone === 'nord') {
+                message.textContent = '📧 Votre contact : Zone Nord';
+            } else {
+                message.textContent = '📧 Votre contact : Zone Sud';
+            }
+            
+            emailLink.textContent = config.email;
+            emailLink.href = `mailto:${config.email}`;
+        }
+
+        codePostalInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            e.target.value = value;
+            
+            if (value.length === 5) {
+                const zone = determinerZone(value);
+                afficherResultat(zone);
+            } else {
+                resultat.classList.remove('visible');
+                error.classList.remove('visible');
+                departements.forEach(dept => {
+                    dept.classList.remove('highlighted', 'dimmed');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
